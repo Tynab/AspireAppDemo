@@ -20,13 +20,13 @@ public static class Extensions
         _ = builder.AddDefaultHealthChecks();
         _ = builder.Services.AddServiceDiscovery();
 
-        _ = builder.Services.ConfigureHttpClientDefaults(http =>
+        _ = builder.Services.ConfigureHttpClientDefaults(x =>
         {
             // Turn on resilience by default
-            _ = http.AddStandardResilienceHandler();
+            _ = x.AddStandardResilienceHandler();
 
             // Turn on service discovery by default
-            _ = http.AddServiceDiscovery();
+            _ = x.AddServiceDiscovery();
         });
 
         return builder;
@@ -34,17 +34,17 @@ public static class Extensions
 
     public static IHostApplicationBuilder ConfigureOpenTelemetry(this IHostApplicationBuilder builder)
     {
-        _ = builder.Logging.AddOpenTelemetry(logging =>
+        _ = builder.Logging.AddOpenTelemetry(x =>
         {
-            logging.IncludeFormattedMessage = true;
-            logging.IncludeScopes = true;
+            x.IncludeFormattedMessage = true;
+            x.IncludeScopes = true;
         });
 
         _ = builder.Services.AddOpenTelemetry()
-                            .WithMetrics(metrics => metrics.AddAspNetCoreInstrumentation()
-                                                           .AddHttpClientInstrumentation()
-                                                           .AddRuntimeInstrumentation())
-                            .WithTracing(tracing => tracing.AddAspNetCoreInstrumentation()
+                            .WithMetrics(x => x.AddAspNetCoreInstrumentation()
+                                               .AddHttpClientInstrumentation()
+                                               .AddRuntimeInstrumentation())
+                            .WithTracing(y => y.AddAspNetCoreInstrumentation()
                             // Uncomment the following line to enable gRPC instrumentation (requires the OpenTelemetry.Instrumentation.GrpcNetClient package)
                             //.AddGrpcClientInstrumentation()
                             .AddHttpClientInstrumentation());
@@ -92,7 +92,7 @@ public static class Extensions
             // Only health checks tagged with the "live" tag must pass for app to be considered alive
             _ = app.MapHealthChecks("/alive", new HealthCheckOptions
             {
-                Predicate = r => r.Tags.Contains("live")
+                Predicate = x => x.Tags.Contains("live")
             });
         }
 

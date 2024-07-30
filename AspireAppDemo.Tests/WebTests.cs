@@ -1,5 +1,4 @@
-using static System.Net.HttpStatusCode;
-using static Xunit.Assert;
+using System.Net;
 
 namespace AspireAppDemo.Tests;
 
@@ -10,12 +9,13 @@ public class WebTests
     {
         // Arrange
         await using var app = await (await DistributedApplicationTestingBuilder.CreateAsync<Projects.AspireAppDemo_AppHost>()).BuildAsync();
+
         await app.StartAsync();
 
         // Act
         var response = await app.CreateHttpClient("webfrontend").GetAsync("/");
 
         // Assert
-        Equal(OK, response.StatusCode);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
 }

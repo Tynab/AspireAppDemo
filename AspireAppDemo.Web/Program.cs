@@ -10,10 +10,10 @@ builder.AddRedisOutputCache("cache");
 // Add services to the container.
 _ = builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 
-_ = builder.Services.AddHttpClient<WeatherApiClient>(client =>
+_ = builder.Services.AddHttpClient<WeatherApiClient>(x =>
     // This URL uses "https+http://" to indicate HTTPS is preferred over HTTP.
     // Learn more about service discovery scheme resolution at https://aka.ms/dotnet/sdschemes.
-    client.BaseAddress = new("https+http://apiservice"));
+    x.BaseAddress = new("https+http://apiservice"));
 
 var app = builder.Build();
 
@@ -28,8 +28,7 @@ _ = app.UseHttpsRedirection();
 _ = app.UseStaticFiles();
 _ = app.UseAntiforgery();
 _ = app.UseOutputCache();
-_ = app.MapRazorComponents<App>()
-       .AddInteractiveServerRenderMode();
+_ = app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 _ = app.MapDefaultEndpoints();
 
 app.Run();
